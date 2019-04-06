@@ -8,6 +8,7 @@
 * Composer [Lien de téléchargement](https://getcomposer.org/download/)
 * Interface de ligne de commandes
 * NPM ou Yarn
+* [Bootstrap](https://getbootstrap.com/docs/4.0/getting-started/download/)
 
 ## Création du projet 
 

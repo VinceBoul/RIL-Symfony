@@ -7,6 +7,7 @@
 * IDE : Sublim Text / Visual Code / PHPStorm / WebStorm
 * Composer [Lien de téléchargement](https://getcomposer.org/download/)
 * Interface de ligne de commandes
+* NPM ou Yarn
 
 ## Création du projet 
 

@@ -50,3 +50,7 @@ Propriétés de l'entité Ingredient:
 **- Ajouter la propriété *Auteur* à l'entité Recette**
 
 **- Ajouter un système de commentaires**
+
+
+Notes : 
+* [Preprocessors EncoreWebpackBundle](https://symfony.com/doc/current/frontend/encore/css-preprocessors.html)

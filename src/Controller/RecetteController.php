@@ -107,7 +107,7 @@ class RecetteController extends AbstractController
 			}
 
 			$recette->setImage($fileName);
-			
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('recette_index', [

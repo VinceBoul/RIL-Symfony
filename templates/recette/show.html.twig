@@ -3,29 +3,30 @@
 {% block title %}Recette{% endblock %}
 
 {% block body %}
-    <h1>Recette</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ recette.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ recette.title }}</td>
-            </tr>
-            <tr>
-                <th>accroche</th>
-                <td>{{ recette.teaser }}</td>
-            </tr>
+    <div class="row">
+        <div class="col-6">
+            <img src="{{ asset('uploads/brochures/' ~ recette.image) }}">
+        </div>
+        <div class="col-6">
+            <h2 class="mb-5">{{ recette.name }}</h2>
 
-        </tbody>
-    </table>
+            <div class="row">
 
-    <a href="{{ path('recette_index') }}">back to list</a>
+            </div>
+            <p><i>{{ recette.teaser }}</i></p>
+            <p>{{ recette.body }}</p>
+        </div>
+    </div>
 
-    <a href="{{ path('recette_edit', {'id': recette.id}) }}">edit</a>
+<div class="row">
+    <div class="col-6">
+        <a class="btn btn-primary" href="{{ path('recette_index') }}">Retour à la liste</a>
+    </div>
+    <div class="col-6">
+        <a href="{{ path('recette_edit', {'id': recette.id}) }}">Modifier</a>
+    </div>
+</div>
 
-    {{ include('recette/_delete_form.html.twig') }}
+
 {% endblock %}

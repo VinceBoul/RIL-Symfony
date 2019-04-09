@@ -15,13 +15,12 @@ class RecetteType extends AbstractType
         $builder
             ->add('title')
             ->add('name')
-            ->add('image', FileType::class)
+            ->add('image', FileType::class, array('data_class' => null))
             ->add('teaser')
             ->add('heating_duration')
             ->add('prepDuration')
             ->add('total_duration')
             ->add('body')
-            ->add('ingredients')
 
         ;
     }

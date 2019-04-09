@@ -1,5 +1,19 @@
 # RIL-Symfony
 
+## explications préalables 
+
+Définition 'bundle'
+
+bundle utilisés 
+
+* Doctrine ORM
+* Webpack encore bundle
+* Knp bundle
+> Possibilité d'utiliser d'autres systèmes de base de données 
+Mongo / Maria Db etc 
+ 
+
+
 ## Projet de recettes 
 
 ### Partie I - Création des entités
@@ -30,10 +44,13 @@ Propriétés de l'entité Recette :
 **- Styliser la page d'accueil**
 
 **- Améliorer la liste des résultats de recette**
-* Ajouter le nombre total de recettes dans la liste
+> Ajouter le nombre total de recettes dans la liste
 
+**- Pagination à ajouter sur la liste des recettes**
 
 ### Partie III
+
+**- Créer un champ de recherche des recettes (sans auto complétion puis avec)**
 
 **- Créer l'entité *Ingredient***
 Propriétés de l'entité Ingredient: 

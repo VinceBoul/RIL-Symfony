@@ -16,7 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class RecetteController extends AbstractController
 {
-    /**
+
+	/**
      * @Route("/", name="recette_index", methods={"GET"})
      */
     public function index(RecetteRepository $recetteRepository): Response

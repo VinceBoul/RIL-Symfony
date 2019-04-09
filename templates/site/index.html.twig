@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SiteController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1 class="mb-5">Bienvenue ! {#{{ controller_name }} !#}</h1>
+
+    <p>Vous êtes arrivés ici via le controller <code><a href="{{ '/Applications/MAMP/htdocs/RIL-Symfony/src/Controller/SiteController.php'|file_link(0) }}">src/Controller/SiteController.php</a></code></p>
+
+    <p>Voici le template utilisé <code><a href="{{ '/Applications/MAMP/htdocs/RIL-Symfony/templates/site/index.html.twig'|file_link(0) }}">templates/site/index.html.twig</a></code></p>
+
+    <a class="btn btn-primary btn-lg mt-4" href="{{ path('recette_index') }}">Voir les recettes</a>
+</div>
+{% endblock %}

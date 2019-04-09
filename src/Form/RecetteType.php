@@ -13,6 +13,14 @@ class RecetteType extends AbstractType
     {
         $builder
             ->add('title')
+            ->add('name')
+            ->add('teaser')
+            ->add('heating_duration')
+            ->add('prepDuration')
+            ->add('total_duration')
+            ->add('body')
+            ->add('ingredients')
+
         ;
     }
 

@@ -13,7 +13,7 @@
 
                 <div class="col-md-4">
                     <div class="card mb-4 box-shadow">
-{#                        <img class="card-img-top" src="../../assets/img/recette.jpg" alt="Card image cap">#}
+                        <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ recette.image) }}" alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title">{{ recette.name }}</h5>
                             <p class="card-text">{{ recette.teaser }}</p>

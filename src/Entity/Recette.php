@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RecetteRepository")
@@ -53,6 +55,9 @@ class Recette
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+	 *
+	 * @Assert\NotBlank(message="Please, upload the product brochure as a PDF file.")
+	 * @Assert\File(mimeTypes={ "image/jpeg" })
      */
     private $image;
 
@@ -150,12 +155,12 @@ class Recette
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getImage()
     {
         return $this->image;
     }
 
-    public function setImage(?string $image): self
+    public function setImage($image): self
     {
         $this->image = $image;
 

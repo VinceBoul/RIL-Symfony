@@ -5,7 +5,9 @@
 /.env.*.local
 /public/bundles/
 /var/
+/node_modules/
 /vendor/
+/public/
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###
@@ -16,10 +18,3 @@
 ###> symfony/web-server-bundle ###
 /.web-server-pid
 ###< symfony/web-server-bundle ###
-
-###> symfony/webpack-encore-bundle ###
-/node_modules/
-/public/build/
-npm-debug.log
-yarn-error.log
-###< symfony/webpack-encore-bundle ###

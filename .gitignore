@@ -4,10 +4,10 @@
 /.env.local.php
 /.env.*.local
 /public/bundles/
+/public/
 /var/
 /node_modules/
 /vendor/
-/public/
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###

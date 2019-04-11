@@ -48,7 +48,7 @@ class RecetteController extends AbstractController
 			// Move the file to the directory where brochures are stored
 			try {
 				$file->move(
-					$this->getParameter('brochures_directory'),
+					$this->getParameter('recettes_img_dir'),
 					$fileName
 				);
 			} catch (FileException $e) {
@@ -101,7 +101,7 @@ class RecetteController extends AbstractController
 			// Move the file to the directory where brochures are stored
 			try {
 				$file->move(
-					$this->getParameter('brochures_directory'),
+					$this->getParameter('recettes_img_dir'),
 					$fileName
 				);
 			} catch (FileException $e) {

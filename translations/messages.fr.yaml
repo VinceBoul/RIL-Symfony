@@ -1,0 +1,8 @@
+form:
+  recette:
+    label:
+      name: Nom de la recette
+      image: Image de la recette
+      teaser: Phrase d'introduction de la recette
+      heating_dur: Temps de cuisson
+      desc: Description complète de la recette

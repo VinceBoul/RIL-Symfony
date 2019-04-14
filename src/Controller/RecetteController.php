@@ -8,6 +8,7 @@ use App\Repository\RecetteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,7 +41,7 @@ class RecetteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
 			// $file stores the uploaded PDF file
-			/** @var Symfony\Component\HttpFoundation\ $file */
+			/** @var UploadedFile $file */
 			$file = $recette->getImage();
 
 			$fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();

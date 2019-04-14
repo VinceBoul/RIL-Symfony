@@ -21,11 +21,6 @@ class Recette
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $name;
 
     /**
@@ -44,19 +39,15 @@ class Recette
     private $heating_duration;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $prepDuration;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $total_duration;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
 	 *
-	 * @Assert\NotBlank(message="Please, upload the product brochure as a PDF file.")
+	 * @Assert\NotBlank(message="Please, sélectionnez une image pour cette recette.")
 	 * @Assert\File(mimeTypes={ "image/jpeg" })
      */
     private $image;
@@ -66,21 +57,14 @@ class Recette
      */
     private $ingredients = [];
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $difficulty;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -143,18 +127,6 @@ class Recette
         return $this;
     }
 
-    public function getTotalDuration(): ?int
-    {
-        return $this->total_duration;
-    }
-
-    public function setTotalDuration(int $total_duration): self
-    {
-        $this->total_duration = $total_duration;
-
-        return $this;
-    }
-
     public function getImage()
     {
         return $this->image;
@@ -175,6 +147,18 @@ class Recette
     public function setIngredients(?array $ingredients): self
     {
         $this->ingredients = $ingredients;
+
+        return $this;
+    }
+
+    public function getDifficulty(): ?int
+    {
+        return $this->difficulty;
+    }
+
+    public function setDifficulty(?int $difficulty): self
+    {
+        $this->difficulty = $difficulty;
 
         return $this;
     }

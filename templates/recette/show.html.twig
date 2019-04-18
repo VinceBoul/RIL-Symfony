@@ -5,10 +5,10 @@
 {% block body %}
 
     <div class="row">
-        <div class="col-6">
-            <img src="{{ asset('uploads/recettes/' ~ recette.image) }}">
+        <div class="col-12 col-md-6">
+            <img src="{{ asset('uploads/recettes/' ~ recette.image) }}" width="100%">
         </div>
-        <div class="col-6">
+        <div class="col-12 col-md-6">
             <h2 class="mb-5">{{ recette.name }}</h2>
 
             <div class="row">
@@ -16,6 +16,13 @@
             </div>
             <p><i>{{ recette.teaser }}</i></p>
             <p>{{ recette.body }}</p>
+
+            <p>Ingredients</p>
+            <ul>
+                {% for ing in recette.ingredients %}
+                    <li>{{ ing.name }}</li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 

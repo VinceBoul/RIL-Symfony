@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Recette;
 use App\Form\RecetteType;
 use App\Repository\RecetteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\File;
@@ -43,21 +44,22 @@ class RecetteController extends AbstractController
 			// $file stores the uploaded PDF file
 			/** @var UploadedFile $file */
 			$file = $recette->getImage();
+			if ($file) {
 
-			$fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+				$fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
 
-			// Move the file to the directory where brochures are stored
-			try {
-				$file->move(
-					$this->getParameter('recettes_img_dir'),
-					$fileName
-				);
-			} catch (FileException $e) {
-				// ... handle exception if something happens during file upload
+				// Move the file to the directory where brochures are stored
+				try {
+					$file->move(
+						$this->getParameter('recettes_img_dir'),
+						$fileName
+					);
+				} catch (FileException $e) {
+					// ... handle exception if something happens during file upload
+				}
+
+				$recette->setImage($fileName);
 			}
-
-			$recette->setImage($fileName);
-
 
 			$entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($recette);
@@ -89,29 +91,56 @@ class RecetteController extends AbstractController
      */
     public function edit(Request $request, Recette $recette): Response
     {
+		$originalTags = new ArrayCollection();
+		$entityManager = $this->getDoctrine()->getManager();
+		// Create an ArrayCollection of the current Tag objects in the database
+		foreach ($recette->getIngredients() as $tag) {
+			$originalTags->add($tag);
+		}
+
+		$originalImageName = null;
+		if (strlen($recette->getImage()) > 0){
+			$originalImageName = $recette->getImage();
+			$originalFile = new File($this->getParameter('recettes_img_dir').'/'.$recette->getImage());
+
+			$recette->setImage($originalFile->getBasename());
+		}
+
         $form = $this->createForm(RecetteType::class, $recette);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 			// $file stores the uploaded PDF file
-			/** @var Symfony\Component\HttpFoundation\ $file */
+			/** @var UploadedFile $file */
 			$file = $recette->getImage();
 
-			$fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+			if ($file){
+				$fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+				// Move the file to the directory where brochures are stored
+				try {
+					$file->move(
+						$this->getParameter('recettes_img_dir'),
+						$fileName
+					);
+				} catch (FileException $e) {
+					// ... handle exception if something happens during file upload
+				}
 
-			// Move the file to the directory where brochures are stored
-			try {
-				$file->move(
-					$this->getParameter('recettes_img_dir'),
-					$fileName
-				);
-			} catch (FileException $e) {
-				// ... handle exception if something happens during file upload
+				$recette->setImage($fileName);
+			}elseif($originalImageName){
+				$recette->setImage($originalImageName);
 			}
 
-			$recette->setImage($fileName);
+			// Création des ingrédients
+			foreach ($originalTags as $tag) {
+				if (false === $recette->getIngredients()->contains($tag)) {
+					// remove the Task from the Tag
+					$entityManager->persist($tag);
+				}
+			}
 
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager->persist($recette);
+            $entityManager->flush();
 
             return $this->redirectToRoute('recette_index', [
                 'id' => $recette->getId(),

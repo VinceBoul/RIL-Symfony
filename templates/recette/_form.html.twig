@@ -1,5 +1,24 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
 
+    {{ form_row(form.name) }}
+    {{ form_row(form.image) }}
+
+    <img src="{{ asset('uploads/recettes/' ~ recette.image) }}" alt="">
+
+    {{ form_row(form.teaser) }}
+    {{ form_row(form.heating_duration) }}
+    {{ form_row(form.body) }}
+
+
+    <h3>Ingredients</h3>
+    <ul class="tags" data-prototype="{{ form_widget(form.ingredients.vars.prototype)|e('html_attr') }}">
+
+        {# iterate over each existing tag and render its only field: name #}
+        {% for tag in form.ingredients %}
+            <li>{{ form_row(tag.name) }}</li>
+        {% endfor %}
+    </ul>
+
+    {{ form_rest(form) }}
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

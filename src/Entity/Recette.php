@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -47,20 +49,24 @@ class Recette
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
 	 *
-	 * @Assert\NotBlank(message="Please, sélectionnez une image pour cette recette.")
 	 * @Assert\File(mimeTypes={ "image/jpeg" })
      */
     private $image;
 
     /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $ingredients = [];
-
-    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private $difficulty;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Ingredient", cascade={"persist"})
+     */
+    private $ingredients;
+
+    public function __construct()
+    {
+        $this->ingredients = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -139,18 +145,6 @@ class Recette
         return $this;
     }
 
-    public function getIngredients(): ?array
-    {
-        return $this->ingredients;
-    }
-
-    public function setIngredients(?array $ingredients): self
-    {
-        $this->ingredients = $ingredients;
-
-        return $this;
-    }
-
     public function getDifficulty(): ?int
     {
         return $this->difficulty;
@@ -159,6 +153,32 @@ class Recette
     public function setDifficulty(?int $difficulty): self
     {
         $this->difficulty = $difficulty;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ingredient[]
+     */
+    public function getIngredients(): Collection
+    {
+        return $this->ingredients;
+    }
+
+    public function addIngredient(Ingredient $ingredient): self
+    {
+        if (!$this->ingredients->contains($ingredient)) {
+            $this->ingredients[] = $ingredient;
+        }
+
+        return $this;
+    }
+
+    public function removeIngredient(Ingredient $ingredient): self
+    {
+        if ($this->ingredients->contains($ingredient)) {
+            $this->ingredients->removeElement($ingredient);
+        }
 
         return $this;
     }

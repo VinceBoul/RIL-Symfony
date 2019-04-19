@@ -45,20 +45,7 @@ class RecetteController extends AbstractController
 			/** @var UploadedFile $file */
 			$file = $recette->getImage();
 			if ($file) {
-
-				$fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
-
-				// Move the file to the directory where brochures are stored
-				try {
-					$file->move(
-						$this->getParameter('recettes_img_dir'),
-						$fileName
-					);
-				} catch (FileException $e) {
-					// ... handle exception if something happens during file upload
-				}
-
-				$recette->setImage($fileName);
+				$recette->setImage($this->getFileName($file));
 			}
 
 			$entityManager = $this->getDoctrine()->getManager();
@@ -91,14 +78,14 @@ class RecetteController extends AbstractController
      */
     public function edit(Request $request, Recette $recette): Response
     {
-		$originalTags = new ArrayCollection();
 		$entityManager = $this->getDoctrine()->getManager();
-		// Create an ArrayCollection of the current Tag objects in the database
-		foreach ($recette->getIngredients() as $tag) {
-			$originalTags->add($tag);
-		}
 
+		$originalTags = $recette->getIngredientsCollection();
+
+		// Image actuelle de la recette
 		$originalImageName = null;
+
+		// On a une nouvelle image
 		if (strlen($recette->getImage()) > 0){
 			$originalImageName = $recette->getImage();
 			$originalFile = new File($this->getParameter('recettes_img_dir').'/'.$recette->getImage());
@@ -115,24 +102,14 @@ class RecetteController extends AbstractController
 			$file = $recette->getImage();
 
 			if ($file){
-				$fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
-				// Move the file to the directory where brochures are stored
-				try {
-					$file->move(
-						$this->getParameter('recettes_img_dir'),
-						$fileName
-					);
-				} catch (FileException $e) {
-					// ... handle exception if something happens during file upload
-				}
-
-				$recette->setImage($fileName);
+				$recette->setImage($this->getFileName($file));
 			}elseif($originalImageName){
 				$recette->setImage($originalImageName);
 			}
 
 			// Création des ingrédients
 			foreach ($originalTags as $tag) {
+				// Si la recette ne contient pas
 				if (false === $recette->getIngredients()->contains($tag)) {
 					// remove the Task from the Tag
 					$entityManager->persist($tag);
@@ -166,6 +143,20 @@ class RecetteController extends AbstractController
 
         return $this->redirectToRoute('recette_index');
     }
+
+    private function getFileName(File $file){
+		$fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+		// Move the file to the directory where brochures are stored
+		try {
+			$file->move(
+				$this->getParameter('recettes_img_dir'),
+				$fileName
+			);
+		} catch (FileException $e) {
+			// ... handle exception if something happens during file upload
+		}
+		return $fileName;
+	}
 
 	/**
 	 * @return string

@@ -17,16 +17,28 @@ class RecetteType extends AbstractType{
     {
 
         $builder
-            ->add('name', null, ['label' => 'form.recette.label.name'])
+            ->add('name', null, [
+            	'label' => 'form.recette.label.name',
+				'attr' => ['class' => 'form-control']
+			])
             ->add('image', FileType::class, [
 				'label' => 'form.recette.label.image',
 				'required' => false,
 				'data' => 'uploads/recettes/'.$options['data']->getImage(),
 				'data_class' => null
 			])
-            ->add('teaser', null, ['label' => 'form.recette.label.teaser'])
-            ->add('heating_duration', null, ['label' => 'form.recette.label.heating_dur'])
-            ->add('body', null, ['label' => 'form.recette.label.desc'])
+            ->add('teaser', null, [
+            	'label' => 'form.recette.label.teaser',
+				'attr' => ['class' => 'form-control']
+			])
+            ->add('heating_duration', null, [
+            	'label' => 'form.recette.label.heating_dur',
+				'attr' => ['class' => 'form-control']
+			])
+            ->add('body', null, [
+            	'label' => 'form.recette.label.desc',
+				'attr' => ['class' => 'form-control']
+			])
 			->add('ingredients', CollectionType::class, [
 				'entry_type' => IngredientType::class,
 				'entry_options' => ['label' => false],

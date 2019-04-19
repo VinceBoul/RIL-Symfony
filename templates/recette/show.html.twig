@@ -17,21 +17,26 @@
             <p><i>{{ recette.teaser }}</i></p>
             <p>{{ recette.body }}</p>
 
+            <hr>
+            {% if recette.ingredients|length > 0 %}
             <p>Ingredients</p>
             <ul>
                 {% for ing in recette.ingredients %}
                     <li>{{ ing.name }}</li>
                 {% endfor %}
             </ul>
+            {% else %}
+                <p><i>Pas d'ingrédients</i></p>
+            {% endif %}
         </div>
     </div>
 
-<div class="row">
+<div class="row mt-4">
     <div class="col-6">
         <a class="btn btn-primary" href="{{ path('recette_index') }}">Retour à la liste</a>
     </div>
     <div class="col-6">
-        <a href="{{ path('recette_edit', {'id': recette.id}) }}">Modifier</a>
+        <a class="btn btn-outline-primary" href="{{ path('recette_edit', {'id': recette.id}) }}">Modifier</a>
     </div>
 </div>
 

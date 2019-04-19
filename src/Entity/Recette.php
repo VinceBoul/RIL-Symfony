@@ -183,4 +183,14 @@ class Recette
         return $this;
     }
 
+	public function getIngredientsCollection()
+	{
+		$ingredientsCollection = new ArrayCollection();
+
+		foreach ($this->getIngredients() as $ingredient) {
+			$ingredientsCollection->add($ingredient);
+		}
+		return $ingredientsCollection;
+	}
+
 }

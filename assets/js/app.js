@@ -16,8 +16,8 @@ console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
 var $collectionHolder;
 
 // setup an "add a tag" link
-var $addTagButton = $('<button type="button" class="add_tag_link">Add a tag</button>');
-var $newLinkLi = $('<li></li>').append($addTagButton);
+var $addTagButton = $('<button type="button" class="add_tag_link btn">Ajouter un ingrédient</button>');
+var $newLinkLi = $('<li class="mt-2"></li>').append($addTagButton);
 
 jQuery(document).ready(function() {
     // Get the ul that holds the collection of tags
@@ -33,6 +33,9 @@ jQuery(document).ready(function() {
     $addTagButton.on('click', function(e) {
         // add a new tag form (see next code block)
         addTagForm($collectionHolder, $newLinkLi);
+    });
+
+    $collectionHolder.find('li').each(function(){
         addTagFormDeleteLink($(this));
     });
 });
@@ -46,6 +49,7 @@ function addTagForm($collectionHolder, $newLinkLi) {
     var index = $collectionHolder.data('index');
 
     var newForm = prototype;
+    console.log(newForm);
     // You need this only if you didn't set 'label' => false in your tags field in TaskType
     // Replace '__name__label__' in the prototype's HTML to
     // instead be a number based on how many items we have
@@ -59,7 +63,7 @@ function addTagForm($collectionHolder, $newLinkLi) {
     $collectionHolder.data('index', index + 1);
 
     // Display the form in the page in an li, before the "Add a tag" link li
-    var $newFormLi = $('<li></li>').append(newForm);
+    var $newFormLi = $('<li class="mt-2"></li>').append(newForm);
     $newLinkLi.before($newFormLi);
 
     addTagFormDeleteLink($newFormLi);
@@ -67,8 +71,9 @@ function addTagForm($collectionHolder, $newLinkLi) {
 }
 
 function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormButton = $('<button type="button">Delete this tag</button>');
-    $tagFormLi.append($removeFormButton);
+    var $removeFormButton = $('<button class="btn ml-2 delete-ingredient" type="button">Supprimer cet ingrédient</button>');
+    // On place le bouton après le champ de texte
+    $tagFormLi.find('input').after($removeFormButton);
 
     $removeFormButton.on('click', function(e) {
         // remove the li for the tag form

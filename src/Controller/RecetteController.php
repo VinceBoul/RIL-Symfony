@@ -39,13 +39,19 @@ class RecetteController extends AbstractController
         $form = $this->createForm(RecetteType::class, $recette);
         $form->handleRequest($request);
 
+		$user = $this->get('security.token_storage')->getToken()->getUser();
+
         if ($form->isSubmitted() && $form->isValid()) {
 
 			// $file stores the uploaded PDF file
 			/** @var UploadedFile $file */
 			$file = $recette->getImage();
 			if ($file) {
-				$recette->setImage($this->getFileName($file));
+				$recette->setImage($this->saveFile($file));
+			}
+
+			if ($user){
+				$recette->setAuthor($user);
 			}
 
 			$entityManager = $this->getDoctrine()->getManager();
@@ -90,8 +96,10 @@ class RecetteController extends AbstractController
 			$originalImageName = $recette->getImage();
 			$originalFile = new File($this->getParameter('recettes_img_dir').'/'.$recette->getImage());
 
+			dump($originalImageName);
 			$recette->setImage($originalFile->getBasename());
 		}
+
 
         $form = $this->createForm(RecetteType::class, $recette);
         $form->handleRequest($request);
@@ -102,8 +110,11 @@ class RecetteController extends AbstractController
 			$file = $recette->getImage();
 
 			if ($file){
-				$recette->setImage($this->getFileName($file));
+				// L'image est enregistrée
+				$recette->setImage($this->saveFile($file));
+				//dd($recette->getImage());
 			}elseif($originalImageName){
+				dd($originalImageName);
 				$recette->setImage($originalImageName);
 			}
 
@@ -144,7 +155,7 @@ class RecetteController extends AbstractController
         return $this->redirectToRoute('recette_index');
     }
 
-    private function getFileName(File $file){
+    private function saveFile(File $file){
 		$fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
 		// Move the file to the directory where brochures are stored
 		try {

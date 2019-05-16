@@ -63,6 +63,11 @@ class Recette
      */
     private $ingredients;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="recettes")
+     */
+    private $author;
+
     public function __construct()
     {
         $this->ingredients = new ArrayCollection();
@@ -184,13 +189,25 @@ class Recette
     }
 
 	public function getIngredientsCollection()
-	{
-		$ingredientsCollection = new ArrayCollection();
+         	{
+         		$ingredientsCollection = new ArrayCollection();
+         
+         		foreach ($this->getIngredients() as $ingredient) {
+         			$ingredientsCollection->add($ingredient);
+         		}
+         		return $ingredientsCollection;
+         	}
 
-		foreach ($this->getIngredients() as $ingredient) {
-			$ingredientsCollection->add($ingredient);
-		}
-		return $ingredientsCollection;
-	}
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
+
+        return $this;
+    }
 
 }

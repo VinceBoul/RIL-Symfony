@@ -11,6 +11,12 @@
         <div class="col-12 col-md-6">
             <h2 class="mb-5">{{ recette.name }}</h2>
 
+            {% if recette.author %}
+                <p>Créée par {{ recette.author.username }}</p>
+            {% else %}
+                <p>Pas d'auteur</p>
+            {% endif %}
+
             <div class="row">
 
             </div>

@@ -12,3 +12,6 @@ form:
     save: Valider
     delete: Supprimer
     show: Voir
+message:
+  confirmation:
+    recette: Nouvelle recette créée

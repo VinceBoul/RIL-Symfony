@@ -1,0 +1,19 @@
+
+
+<div class="row">
+    <div class="col-8 mx-auto">
+
+        <p>Posté par
+            {% if comment.author %}
+                {{ comment.author.username }}
+            {% else %}
+                Anonyme
+            {% endif %}
+        </p>
+        <p>Note : {{ comment.rate }}</p>
+        <p>Message : {{ comment.body }}</p>
+
+        <a href="{{ path('comment_edit', {'id': comment.id}) }}">edit</a>
+        <hr>
+    </div>
+</div>

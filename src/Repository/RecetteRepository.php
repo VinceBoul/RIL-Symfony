@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Recette;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -19,22 +20,29 @@ class RecetteRepository extends ServiceEntityRepository
         parent::__construct($registry, Recette::class);
     }
 
-    // /**
-    //  * @return Recette[] Returns an array of Recette objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Recette[] Returns an array of Recette objects
+     */
+    public function findByDuration($value)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+		$qb = $this->createQueryBuilder('r');
+
+		// SELECT toutes les colonnes
+		$query  = $qb->select('u')
+				->innerJoin('App\Entity\User', 'u', Expr\Join::WITH,
+					'r.author = u')
+				// Instruction WHERE
+/*				->where(
+					$qb->expr()
+						// gt = Greater Than
+						->gt('r.prepDuration', $value) // = durée recette > $value
+				)*/
+				->getQuery();
+
+		echo $query->getSQL();
+
+		return $query->getResult();
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Recette

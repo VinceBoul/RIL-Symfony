@@ -5,36 +5,9 @@
 {% block body %}
     <h1>Toutes les recettes ({{ recettes|length }})</h1>
 
-    <div class="album py-5">
-        <div class="container">
-
-            <div class="row">
-                {% for recette in recettes %}
-
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card mb-4 box-shadow">
-                        <img class="card-img-top" src="{{ asset('uploads/recettes/' ~ recette.image) }}" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ recette.name }}</h5>
-                            <p class="card-text">{{ recette.teaser|slice(0, 50)~'...' }}</p>
-                            <div class="align-items-center">
-                                <div class="btn-group">
-                                    <a href="{{ path('recette_show', {'id': recette.id}) }}" class="btn btn-lg btn-outline-primary">
-                                        {{ 'form.btn.show'|trans }}
-                                    </a>
-                                    <a class="btn btn-lg btn-outline-secondary" href="{{ path('recette_edit', {'id': recette.id}) }}">
-                                        {{ 'form.btn.edit'|trans }}
-                                    </a>
-                                </div>
-                                <small class="text-muted"></small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        <a class="btn btn-primary" href="{{ path('recette_new') }}">Ajouter une recette</a>
-    </div>
+    {% include 'recette/_recettes_list.html.twig' with {
+            'recettes_de_la_mort' : recettes
+        }
+    %}
 
 {% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+
+    <ul class="list-unstyled">
+
+        {% for user in users %}
+            <li>
+                <a href="{{ path('user_show',
+                    {'id' : user.id }) }}">
+
+                    {{ user.username }}
+                </a>
+            </li>
+        {% else %}
+            <li>Il n'y pas d'utilisateurs</li>
+        {% endfor %}
+
+    </ul>
+{#
+    {{ dump(users|first) }}
+
+    {{ dump(users|last) }}
+#}
+{% endblock %}

@@ -12,7 +12,7 @@
             <h2 class="mb-5">{{ recette.name }}</h2>
 
             {% if recette.author %}
-                <p>Créée par {{ recette.author.username }}</p>
+                <p>Créée par {{ recette.author }}</p>
             {% else %}
                 <p>Pas d'auteur</p>
             {% endif %}
@@ -34,6 +34,20 @@
             {% else %}
                 <p><i>Pas d'ingrédients</i></p>
             {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            {% for comment in recette.comments %}
+                {% include 'comment/show.html.twig' %}
+            {% else %}
+                Aucun commentaire
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {% include 'comment/_form.html.twig' %}
         </div>
     </div>
 

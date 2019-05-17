@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Recette;
+use App\Form\CommentType;
 use App\Form\RecetteType;
 use App\Repository\RecetteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,9 +15,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
- * @Route("/recette")
+ * @Route("{_locale}/recette", requirements={"_locale"="fr|en"})
  */
 class RecetteController extends AbstractController
 {
@@ -25,14 +28,19 @@ class RecetteController extends AbstractController
      */
     public function index(RecetteRepository $recetteRepository): Response
     {
-        return $this->render('recette/index.html.twig', [
+		$this->addFlash('error',
+			"Message d'erreur");
+		$this->addFlash('success',
+			'message.confirmation.recette');
+
+		return $this->render('recette/index.html.twig', [
             'recettes' => $recetteRepository->findAll(),
         ]);
     }
 
     /**
      * @Route("/new", name="recette_new", methods={"GET","POST"})
-     */
+	 */
     public function new(Request $request): Response
     {
         $recette = new Recette();
@@ -58,7 +66,10 @@ class RecetteController extends AbstractController
             $entityManager->persist($recette);
             $entityManager->flush();
 
-            return $this->redirectToRoute('recette_index');
+			$this->addFlash('success', 'message.confirmation.recette');
+
+
+			return $this->redirectToRoute('recette_index');
         }
 
 
@@ -70,13 +81,19 @@ class RecetteController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="recette_show", methods={"GET"})
+     * @Route("/{id}", name="recette_show", methods={"GET", "POST"})
      */
     public function show(Recette $recette): Response
     {
-        return $this->render('recette/show.html.twig', [
+		$comment = new Comment();
+		$comment->setRecette($recette);
+		$form = $this->createForm(CommentType::class, $comment);
+
+
+		return $this->render('recette/show.html.twig', [
             'recette' => $recette,
-        ]);
+			'form' => $form->createView(),
+		]);
     }
 
     /**

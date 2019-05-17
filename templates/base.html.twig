@@ -53,9 +53,11 @@
                         {% else %}
                             <strong>Accueil</strong>
                         {% endif %}
-
                     </a>
 
+                    <div class="float-right">
+                        {% include 'partials/language_switcher.html.twig' %}
+                    </div>
 
 
 
@@ -70,6 +72,19 @@
 
             <section class="jumbotron text-center">
                 <div class="container">
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success">
+                            {{ message|trans }}
+                        </div>
+                    {% endfor %}
+
+                    {% for message in app.flashes('error') %}
+                        <div class="alert alert-danger">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="container">
 
                     {% block body %}{% endblock %}
 
@@ -80,6 +95,7 @@
 
         <footer class="text-muted">
             <div class="container">
+
                 <p class="float-right">
                     <a href="#">Remonter en haut</a>
                 </p>

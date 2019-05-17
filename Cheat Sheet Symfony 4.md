@@ -117,3 +117,9 @@ La commande suivante permet de générer un CRUD :
 php bin/console make:crud  
 ```
 
+## Génération des fichiers de traduction
+Il est possible de générer automatiquement les fichiers de traduction. 
+Cette commande va rechercher toutes les clefs de traduction du TWIG qui utilisent le filtre `trans`.
+```
+php bin/console translation:update --force fr
+```

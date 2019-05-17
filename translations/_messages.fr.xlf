@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="fr" target-language="fr" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="YTIhY.e" resname="form.recette.label.name">
+        <source>form.recette.label.name</source>
+        <target>Nom de la recette</target>
+      </trans-unit>
+      <trans-unit id="sPpu8oC" resname="form.recette.label.image">
+        <source>form.recette.label.image</source>
+        <target>Image de la recette</target>
+      </trans-unit>
+      <trans-unit id="D835n74" resname="form.recette.label.teaser">
+        <source>form.recette.label.teaser</source>
+        <target>Phrase d'introduction de la recette</target>
+      </trans-unit>
+      <trans-unit id="xZLaxIv" resname="form.recette.label.heating_dur">
+        <source>form.recette.label.heating_dur</source>
+        <target>Temps de cuisson</target>
+      </trans-unit>
+      <trans-unit id="EGs1.Yu" resname="form.recette.label.desc">
+        <source>form.recette.label.desc</source>
+        <target>Description complète de la recette</target>
+      </trans-unit>
+      <trans-unit id="_H9Pk9c" resname="form.btn.create">
+        <source>form.btn.create</source>
+        <target>Créer</target>
+      </trans-unit>
+      <trans-unit id="qDJ7F0H" resname="form.btn.edit">
+        <source>form.btn.edit</source>
+        <target>Modifier</target>
+      </trans-unit>
+      <trans-unit id="Gwm3WYT" resname="form.btn.save">
+        <source>form.btn.save</source>
+        <target>Valider</target>
+      </trans-unit>
+      <trans-unit id="vbXW8EG" resname="form.btn.delete">
+        <source>form.btn.delete</source>
+        <target>Supprimer</target>
+      </trans-unit>
+      <trans-unit id="M8XCVJ4" resname="form.btn.show">
+        <source>form.btn.show</source>
+        <target>Voir</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

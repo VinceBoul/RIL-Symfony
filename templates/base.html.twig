@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
+
         <meta charset="UTF-8">
+        <meta name="description" content="Projet RIL Symfony">
+        <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+        <meta name="author" content="John Doe">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
         <title>{% block title %}RIL Symfony!{% endblock %}</title>
 
         {% block stylesheets %}
@@ -32,9 +38,26 @@
             </div>
             <div class="navbar navbar-dark bg-dark box-shadow">
                 <div class="container d-flex justify-content-between">
+
+
+
                     <a href="{{ path('home') }}" class="navbar-brand d-flex align-items-center">
-                        <strong>Accueil</strong>
+
+
+                        {% if app.user %}
+                            Salut {{ app.user.username|upper }} !
+                            <a href="{{ path('app_logout') }}">Déconnexion</a>
+                        {% else %}
+                            <strong>Accueil</strong>
+                        {% endif %}
                     </a>
+
+                    <div class="float-right">
+                        {% include 'partials/language_switcher.html.twig' %}
+                    </div>
+
+
+
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -46,6 +69,19 @@
 
             <section class="jumbotron text-center">
                 <div class="container">
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success">
+                            {{ message|trans }}
+                        </div>
+                    {% endfor %}
+
+                    {% for message in app.flashes('error') %}
+                        <div class="alert alert-danger">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="container">
 
                     {% block body %}{% endblock %}
 
@@ -56,6 +92,7 @@
 
         <footer class="text-muted">
             <div class="container">
+
                 <p class="float-right">
                     <a href="#">Remonter en haut</a>
                 </p>

@@ -1,0 +1,6 @@
+{{ form_start(form, {'action': path('comment_new'), 'method': 'POST'}) }}
+
+    <input name="recette_id" type="hidden" value="{{ recette.id }}">
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

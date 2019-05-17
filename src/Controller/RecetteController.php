@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Recette;
+use App\Form\CommentType;
 use App\Form\RecetteType;
 use App\Repository\RecetteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\File;
@@ -12,9 +15,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
- * @Route("/recette")
+ * @Route("{_locale}/recette", requirements={"_locale"="fr|en"})
  */
 class RecetteController extends AbstractController
 {
@@ -24,46 +28,48 @@ class RecetteController extends AbstractController
      */
     public function index(RecetteRepository $recetteRepository): Response
     {
-        return $this->render('recette/index.html.twig', [
+		$this->addFlash('error',
+			"Message d'erreur");
+		$this->addFlash('success',
+			'message.confirmation.recette');
+
+		return $this->render('recette/index.html.twig', [
             'recettes' => $recetteRepository->findAll(),
         ]);
     }
 
     /**
      * @Route("/new", name="recette_new", methods={"GET","POST"})
-     */
+	 */
     public function new(Request $request): Response
     {
         $recette = new Recette();
         $form = $this->createForm(RecetteType::class, $recette);
         $form->handleRequest($request);
 
+		$user = $this->get('security.token_storage')->getToken()->getUser();
+
         if ($form->isSubmitted() && $form->isValid()) {
 
 			// $file stores the uploaded PDF file
 			/** @var UploadedFile $file */
 			$file = $recette->getImage();
-
-			$fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
-
-			// Move the file to the directory where brochures are stored
-			try {
-				$file->move(
-					$this->getParameter('recettes_img_dir'),
-					$fileName
-				);
-			} catch (FileException $e) {
-				// ... handle exception if something happens during file upload
+			if ($file) {
+				$recette->setImage($this->saveFile($file));
 			}
 
-			$recette->setImage($fileName);
-
+			if ($user){
+				$recette->setAuthor($user);
+			}
 
 			$entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($recette);
             $entityManager->flush();
 
-            return $this->redirectToRoute('recette_index');
+			$this->addFlash('success', 'message.confirmation.recette');
+
+
+			return $this->redirectToRoute('recette_index');
         }
 
 
@@ -75,13 +81,19 @@ class RecetteController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="recette_show", methods={"GET"})
+     * @Route("/{id}", name="recette_show", methods={"GET", "POST"})
      */
     public function show(Recette $recette): Response
     {
-        return $this->render('recette/show.html.twig', [
+		$comment = new Comment();
+		$comment->setRecette($recette);
+		$form = $this->createForm(CommentType::class, $comment);
+
+
+		return $this->render('recette/show.html.twig', [
             'recette' => $recette,
-        ]);
+			'form' => $form->createView(),
+		]);
     }
 
     /**
@@ -89,29 +101,51 @@ class RecetteController extends AbstractController
      */
     public function edit(Request $request, Recette $recette): Response
     {
+		$entityManager = $this->getDoctrine()->getManager();
+
+		$originalTags = $recette->getIngredientsCollection();
+
+		// Image actuelle de la recette
+		$originalImageName = null;
+
+		// On a une nouvelle image
+		if (strlen($recette->getImage()) > 0){
+			$originalImageName = $recette->getImage();
+			$originalFile = new File($this->getParameter('recettes_img_dir').'/'.$recette->getImage());
+
+			dump($originalImageName);
+			$recette->setImage($originalFile->getBasename());
+		}
+
+
         $form = $this->createForm(RecetteType::class, $recette);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 			// $file stores the uploaded PDF file
-			/** @var Symfony\Component\HttpFoundation\ $file */
+			/** @var UploadedFile $file */
 			$file = $recette->getImage();
 
-			$fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
-
-			// Move the file to the directory where brochures are stored
-			try {
-				$file->move(
-					$this->getParameter('recettes_img_dir'),
-					$fileName
-				);
-			} catch (FileException $e) {
-				// ... handle exception if something happens during file upload
+			if ($file){
+				// L'image est enregistrée
+				$recette->setImage($this->saveFile($file));
+				//dd($recette->getImage());
+			}elseif($originalImageName){
+				dd($originalImageName);
+				$recette->setImage($originalImageName);
 			}
 
-			$recette->setImage($fileName);
+			// Création des ingrédients
+			foreach ($originalTags as $tag) {
+				// Si la recette ne contient pas
+				if (false === $recette->getIngredients()->contains($tag)) {
+					// remove the Task from the Tag
+					$entityManager->persist($tag);
+				}
+			}
 
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager->persist($recette);
+            $entityManager->flush();
 
             return $this->redirectToRoute('recette_index', [
                 'id' => $recette->getId(),
@@ -137,6 +171,20 @@ class RecetteController extends AbstractController
 
         return $this->redirectToRoute('recette_index');
     }
+
+    private function saveFile(File $file){
+		$fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+		// Move the file to the directory where brochures are stored
+		try {
+			$file->move(
+				$this->getParameter('recettes_img_dir'),
+				$fileName
+			);
+		} catch (FileException $e) {
+			// ... handle exception if something happens during file upload
+		}
+		return $fileName;
+	}
 
 	/**
 	 * @return string

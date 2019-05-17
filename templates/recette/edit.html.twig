@@ -5,9 +5,15 @@
 {% block body %}
     <h1>Modifier Recette</h1>
 
-    {{ include('recette/_form.html.twig', {'button_label': 'Valider'}) }}
+    {{ include('recette/_form.html.twig', {'button_label': 'form.btn.save'|trans }) }}
 
-    <a href="{{ path('recette_index') }}">Retour à la liste</a>
+    <div class="row mt-4">
+        <div class="col-6">
+            <a class="btn btn-primary" href="{{ path('recette_index') }}">Retour à la liste</a>
+        </div>
+        <div class="col-6">
+            {{ include('recette/_delete_form.html.twig') }}
+        </div>
+    </div>
 
-    {{ include('recette/_delete_form.html.twig') }}
 {% endblock %}

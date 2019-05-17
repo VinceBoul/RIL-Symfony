@@ -1,0 +1,14 @@
+form:
+  recette:
+    label:
+      name: Recipe's name
+      image: Recipe's picture
+      teaser: Recipe's teaser
+      heating_dur: Recipe's duration
+      desc: Recipe's description
+  btn:
+    create: Create
+    edit: Edit
+    save: Save
+    delete: Delete
+    show: See

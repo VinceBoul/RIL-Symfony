@@ -6,3 +6,12 @@ form:
       teaser: Phrase d'introduction de la recette
       heating_dur: Temps de cuisson
       desc: Description complète de la recette
+  btn:
+    create: Créer
+    edit: Modifier
+    save: Valider
+    delete: Supprimer
+    show: Voir
+message:
+  confirmation:
+    recette: Nouvelle recette créée

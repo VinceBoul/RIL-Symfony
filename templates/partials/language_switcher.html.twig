@@ -1,0 +1,11 @@
+
+{%  if (app.request.locale == 'fr') %}
+    {% set newLocale = 'en' %}
+{% else %}
+    {% set newLocale = 'fr' %}
+{% endif %}
+
+<a href="{{ path(app.request.attributes.get('_route'),
+    app.request.attributes.get('_route_params')|merge( {'_locale' : newLocale }) ) }}">
+    {{ newLocale }}
+</a>

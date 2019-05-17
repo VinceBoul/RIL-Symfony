@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+
+    <h1>Recettes de l'utilisateur {{ user.username }}</h1>
+
+    <ul class="list-unstyled">
+
+        {% include 'recette/_recettes_list.html.twig' with {
+            'recettes_de_la_mort' : user.recettes
+        }
+        %}
+    </ul>
+{#
+    {{ dump(users|first) }}
+
+    {{ dump(users|last) }}
+#}
+{% endblock %}

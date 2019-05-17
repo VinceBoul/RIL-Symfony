@@ -1,5 +1,36 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
 
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+    {% include 'recette/input_field.html.twig' with { 'field' : form.name } %}
+
+    {% include 'recette/input_field.html.twig' with { 'field' : form.teaser } %}
+
+    {% include 'recette/input_field.html.twig' with { 'field' : form.heating_duration } %}
+
+    {% include 'recette/input_field.html.twig' with { 'field' : form.body } %}
+
+    <div class="row">
+
+        <div class="col-12 col-md-6  pt-3">
+            {{ form_row(form.image) }}
+        </div>
+        <div class="col-12 col-md-6">
+            <img class="img-fluid" src="{{ asset('uploads/recettes/' ~ recette.image) }}" alt="">
+        </div>
+    </div>
+
+
+    <h3>Ingredients</h3>
+    <ul class="tags list-unstyled" data-prototype="{{ form_widget(form.ingredients.vars.prototype)|e('html_attr') }}">
+
+        {# iterate over each existing tag and render its only field: name #}
+        {% for tag in form.ingredients %}
+            <li class="mt-2">
+                {{ form_widget(tag.name) }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <button class="btn btn-success mt-3">{{ button_label|default('Save') }}</button>
+
 {{ form_end(form) }}

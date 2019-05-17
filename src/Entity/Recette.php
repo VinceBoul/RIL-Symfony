@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -47,20 +49,35 @@ class Recette
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
 	 *
-	 * @Assert\NotBlank(message="Please, sélectionnez une image pour cette recette.")
 	 * @Assert\File(mimeTypes={ "image/jpeg" })
      */
     private $image;
 
     /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $ingredients = [];
-
-    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private $difficulty;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Ingredient", cascade={"persist"})
+     */
+    private $ingredients;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="recettes")
+     */
+    private $author;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="recette", orphanRemoval=true)
+     */
+    private $comments;
+
+    public function __construct()
+    {
+        $this->ingredients = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -139,18 +156,6 @@ class Recette
         return $this;
     }
 
-    public function getIngredients(): ?array
-    {
-        return $this->ingredients;
-    }
-
-    public function setIngredients(?array $ingredients): self
-    {
-        $this->ingredients = $ingredients;
-
-        return $this;
-    }
-
     public function getDifficulty(): ?int
     {
         return $this->difficulty;
@@ -162,5 +167,89 @@ class Recette
 
         return $this;
     }
+
+    /**
+     * @return Collection|Ingredient[]
+     */
+    public function getIngredients(): Collection
+    {
+        return $this->ingredients;
+    }
+
+    public function addIngredient(Ingredient $ingredient): self
+    {
+        if (!$this->ingredients->contains($ingredient)) {
+            $this->ingredients[] = $ingredient;
+        }
+
+        return $this;
+    }
+
+    public function removeIngredient(Ingredient $ingredient): self
+    {
+        if ($this->ingredients->contains($ingredient)) {
+            $this->ingredients->removeElement($ingredient);
+        }
+
+        return $this;
+    }
+
+	public function getIngredientsCollection()
+                        	{
+                        		$ingredientsCollection = new ArrayCollection();
+
+                        		foreach ($this->getIngredients() as $ingredient) {
+                        			$ingredientsCollection->add($ingredient);
+                        		}
+                        		return $ingredientsCollection;
+                        	}
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setRecette($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getRecette() === $this) {
+                $comment->setRecette(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+	{
+		return $this->name;
+	}
 
 }

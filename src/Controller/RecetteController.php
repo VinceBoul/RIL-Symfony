@@ -28,10 +28,8 @@ class RecetteController extends AbstractController
      */
     public function index(RecetteRepository $recetteRepository): Response
     {
-		$this->addFlash('error',
-			"Message d'erreur");
-		$this->addFlash('success',
-			'message.confirmation.recette');
+//		$this->addFlash('error', "Message d'erreur");
+//		$this->addFlash('success','message.confirmation.recette');
 
 		return $this->render('recette/index.html.twig', [
             'recettes' => $recetteRepository->findAll(),
@@ -71,8 +69,6 @@ class RecetteController extends AbstractController
 
 			return $this->redirectToRoute('recette_index');
         }
-
-
 
         return $this->render('recette/new.html.twig', [
             'recette' => $recette,
